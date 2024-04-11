@@ -108,12 +108,11 @@ Make sure to create a `.env` file in the root directory and provide the followin
   "email": "user@example.com",
   "password": "password",
   "username": "John Doe"
- }
-
+  }
   ```
   - Response
  ```
-{
+ {
   "_id": "637984729847298472984729",
   "username": "John Doe",
   "email": "user@example.com",
@@ -121,7 +120,7 @@ Make sure to create a `.env` file in the root directory and provide the followin
     "salt": "sdfsdfsdfsdf",
     "password": "sdfsdfsdfsdf"
   }
-}
+ }
 
 ```
 

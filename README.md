@@ -603,7 +603,8 @@ GEMINI_API_KEY=<your-gemini-api-key> : The Redis URL for caching.
 
 1. Start the development server:
 
-```npm start
+```
+npm start
 ```
 
 The server will start running at `http://localhost:8080`.

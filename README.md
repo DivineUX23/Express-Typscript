@@ -117,7 +117,7 @@ To create a new post with the optional Gemini AI rewrite, send a POST request to
 ```json
 {
   "post": "This is my post.",
-  "edit": "Make it lively", : Calling Gemini AI rewrite
+  "edit": "Make it lively", // Calling Gemini AI rewrite
   "imageUrl": null,
   "videoUrl": null
 }
@@ -129,7 +129,7 @@ To create a new post with the optional Gemini AI rewrite, send a POST request to
 {
   "_id": "637984729847298472984729",
   "user": "637984729847298472984729",
-  "post": "Super excited to share this post with you!", : Post after Gemini AI rewrite
+  "post": "Super excited to share this post with you!", //Post after Gemini AI rewrite
   "imageUrl": null,
   "videoUrl": null,
   "createdAt": "2023-08-09T18:30:00.000Z",
@@ -268,7 +268,7 @@ If the `edit` field is provided in the request body, the Gemini AI model will be
 ```json
 {
   "post": "This is my post.",
-  "edit": "Make it lively" :calling gemini AI rewrite
+  "edit": "Make it lively" //calling gemini AI rewrite
   "imageUrl": null,
   "videoUrl": null
 }
@@ -280,7 +280,7 @@ If the `edit` field is provided in the request body, the Gemini AI model will be
 {
   "_id": "637984729847298472984729",
   "user": "637984729847298472984729",
-  "post": "Super excited to share this post with you!", :post after gemini AI rewrite
+  "post": "Super excited to share this post with you!", //post after gemini AI rewrite
   "imageUrl": null,
   "videoUrl": null,
   "createdAt": "2023-08-09T18:30:00.000Z",

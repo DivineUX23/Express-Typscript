@@ -1,4 +1,4 @@
-# Express-TypeScript
+# Express-TypeScript (AI-powered social media)
  A RESTful API for a basic social media platform powered by an AI that optionally enhances users' posts.
  
 This Express-based server application is built with TypeScript, designed to handle various functionalities such as user authentication, post creation and management, and real-time notifications using Socket.IO.
@@ -12,7 +12,7 @@ This Express-based server application is built with TypeScript, designed to hand
   - [Helpers](#helpers)
   - [Middlewares](#middlewares)
   - [Routers](#routers)
-- [Environment Variables](#environment-variables)
+- [Google Gemini AI Integration](#google-gemini-AI-Integration)
 - [API Documentation](#api-documentation)
 - [Installation](#installation)
 - [Usage](#usage)
@@ -86,13 +86,47 @@ This Express-based server application is built with TypeScript, designed to hand
 - `index.ts`: Entry point of the application, responsible for setting up the server, connecting to the database, and configuring middleware and routes.
 
 
-## Environment Variables
 
-Make sure to create a `.env` file in the root directory and provide the following environment variables:
+## Google Gemini AI Integration
 
-- `MONGO_URL`: The MongoDB connection URL.
-- `GEMINI_API_KEY`: The API key for Google's Generative AI (Gemini).
-- `REDIS_URL`: The Redis URL for caching.
+This project integrates with the Google Gemini AI model to provide an optional text rewrite feature for creating new posts. The Gemini AI model can be used to enhance or rephrase the content of a post before it is created, allowing users to generate more engaging and lively content.
+
+### Usage
+
+To create a new post with the optional Gemini AI rewrite, send a POST request to the `/posts/new` endpoint with the following request body:
+
+#### Create a new post (with optional Gemini AI rewrite)
+
+**Route:** POST /posts/new
+
+**Body:**
+
+```json
+{
+  "post": "This is my post.",
+  "edit": "Make it lively", // Calling Gemini AI rewrite
+  "imageUrl": null,
+  "videoUrl": null
+}
+```
+
+**Response:**
+
+```json
+{
+  "_id": "637984729847298472984729",
+  "user": "637984729847298472984729",
+  "post": "Super excited to share this post with you!", // Post after Gemini AI rewrite
+  "imageUrl": null,
+  "videoUrl": null,
+  "createdAt": "2023-08-09T18:30:00.000Z",
+  "likes": [],
+  "comments": []
+}
+```
+
+If the `edit` field is provided in the request body, the Gemini AI model will be used to rephrase or enhance the post content according to the specified instructions. If the `edit` field is not provided, the post will be created without any AI rewrite.
+
 
 
 
@@ -528,38 +562,39 @@ Make sure to create a `.env` file in the root directory and provide the followin
 
 1. Clone the repository:
 
-```bash
+```
 git clone https://github.com/your-username/express-typescript-project.git
 ```
 
 2. Navigate to the project directory:
 
-```bash
+```
 cd express-typescript-project
 ```
 
 3. Install the dependencies:
 
-```bash
+```
 npm install
 ```
 
 4. Create a `.env` file in the root directory and add the following environment variables:
 
 ```
-MONGO_URL=<your-mongodb-url>
-REDIS_URL=<your-redis-url>
-GEMINI_API_KEY=<your-gemini-api-key>
+MONGO_URL=<your-mongodb-url> : The MongoDB connection URL.
+REDIS_URL=<your-redis-url> : The API key for Google's Generative AI (Gemini).
+GEMINI_API_KEY=<your-gemini-api-key> : The Redis URL for caching.
 ```
 
 ## Usage
 
 1. Start the development server:
 
-```bash
-npm run dev
+```npm start
 ```
 
 The server will start running at `http://localhost:8080`.
 
 2. Use an API client like Postman or cURL to interact with the available endpoints.
+
+

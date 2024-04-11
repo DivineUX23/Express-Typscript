@@ -97,43 +97,26 @@ Make sure to create a `.env` file in the root directory and provide the followin
 
 
 ## API Documentation
+## API Documentation
 
 ### Authentication
 
-- `POST /auth/register`: Register a new user account.
+#### Login
 
-    - Body
-  ```
-  {
-  "email": "user@example.com",
-  "password": "password",
-  "username": "John Doe"
-  }
-  ```
-  - Response
- ```
- {
-  "_id": "637984729847298472984729",
-  "username": "John Doe",
-  "email": "user@example.com",
-  "authentication": {
-    "salt": "sdfsdfsdfsdf",
-    "password": "sdfsdfsdfsdf"
-  }
- }
+**Route:** POST /auth/login
 
-```
+**Body:**
 
-- `POST /auth/login`: Log in with an existing user account.
-    - Body
-  ```
-  {
+```json
+{
   "email": "user@example.com",
   "password": "password"
-  }
-  ```
-  - Response
+}
 ```
+
+**Response:**
+
+```json
 {
   "_id": "637984729847298472984729",
   "username": "John Doe",
@@ -143,29 +126,49 @@ Make sure to create a `.env` file in the root directory and provide the followin
   }
 }
 ```
-  
 
-### Users
+#### Register
 
-- `GET /users`: Retrieve a list of all users (paginated).
-- `DELETE /users/:id`: Delete a user by ID.
-- `PATCH /users/:id`: Update a user's username by ID.
-- `POST /follow/:id`: Follow another user by ID.
+**Route:** POST /auth/register
+
+**Body:**
+
+```json
+{
+  "email": "user@example.com",
+  "password": "password",
+  "username": "John Doe"
+}
+```
+
+**Response:**
+
+```json
+{
+  "_id": "637984729847298472984729",
+  "username": "John Doe",
+  "email": "user@example.com",
+  "authentication": {
+    "salt": "sdfsdfsdfsdf",
+    "password": "sdfsdfsdfsdf"
+  }
+}
+```
 
 ### Posts
 
-- `GET /posts`: Retrieve a list of all posts (paginated).
+#### Get All Posts
 
-```
-Query Parameters:
+**Route:** GET /posts
 
- - page: The page number (default: 1)
+**Query Parameters:**
 
- - limit: The number of posts per page (default: 10)
-```
+- `page`: The page number (default: 1)
+- `limit`: The number of posts per page (default: 10)
 
-  - Response
-```
+**Response:**
+
+```json
 {
   "posts": [
     {
@@ -185,21 +188,19 @@ Query Parameters:
     "totalItems": 1
   }
 }
-
-
 ```
 
-- `GET /posts/:id`: Retrieve a single post by ID.
+#### Get Post by ID
 
-```
-Query Parameters:
+**Route:** GET /posts/:id
 
- - id: The ID of the post
-   
-```
+**Parameters:**
 
-  - Response
-```
+- `id`: The ID of the post
+
+**Response:**
+
+```json
 {
   "_id": "637984729847298472984729",
   "user": "637984729847298472984729",
@@ -210,21 +211,98 @@ Query Parameters:
   "likes": [],
   "comments": []
 }
-
 ```
 
-- `POST /posts/new`: Create a new post (with optional Gemini AI rewrite).
+#### Create Post
 
+**Route:** POST /posts/new
+
+**Body:**
+
+```json
+{
+  "post": "This is a post.",
+  "imageUrl": null,
+  "videoUrl": null
+}
 ```
-Query Parameters:
 
- - page: The page number (default: 1)
+**Response:**
 
- - limit: The number of posts per page (default: 10)
+```json
+{
+  "_id": "637984729847298472984729",
+  "user": "637984729847298472984729",
+  "post": "This is a post.",
+  "imageUrl": null,
+  "videoUrl": null,
+  "createdAt": "2023-08-09T18:30:00.000Z",
+  "likes": [],
+  "comments": []
+}
 ```
 
-  - Response
+#### Delete Post
+
+**Route:** DELETE /posts/:id
+
+**Parameters:**
+
+- `id`: The ID of the post
+
+**Response:**
+
+```json
+{
+  "_id": "637984729847298472984729",
+  "user": "637984729847298472984729",
+  "post": "This is a post.",
+  "imageUrl": null,
+  "videoUrl": null,
+  "createdAt": "2023-08-09T18:30:00.000Z",
+  "likes": [],
+  "comments": []
+}
 ```
+
+#### Update Post
+
+**Route:** PATCH /posts/:id
+
+**Body:**
+
+```json
+{
+  "post": "This is an updated post."
+}
+```
+
+**Response:**
+
+```json
+{
+  "_id": "637984729847298472984729",
+  "user": "637984729847298472984729",
+  "post": "This is an updated post.",
+  "imageUrl": null,
+  "videoUrl": null,
+  "createdAt": "2023-08-09T18:30:00.000Z",
+  "likes": [],
+  "comments": []
+}
+```
+
+#### Get Posts by User
+
+**Route:** GET /posts/user/:id
+
+**Parameters:**
+
+- `id`: The ID of the user
+
+**Response:**
+
+```json
 {
   "posts": [
     {
@@ -244,22 +322,15 @@ Query Parameters:
     "totalItems": 1
   }
 }
-
-
 ```
 
-- `DELETE /posts/:id`: Delete a post by ID.
+#### Get Posts from Followed Users
 
-```
-Query Parameters:
+**Route:** GET /post/following
 
- - page: The page number (default: 1)
+**Response:**
 
- - limit: The number of posts per page (default: 10)
-```
-
-  - Response
-```
+```json
 {
   "posts": [
     {
@@ -279,51 +350,77 @@ Query Parameters:
     "totalItems": 1
   }
 }
-
-
 ```
 
-- `PATCH /posts/:id`: Update a post by ID (with optional content and media updates).
+#### Comment on Post
 
-```
-Query Parameters:
+**Route:** POST /posts/comment/:id
 
- - page: The page number (default: 1)
+**Parameters:**
 
- - limit: The number of posts per page (default: 10)
-```
+- `id`: The ID of the post
 
-  - Response
-```
+**Body:**
+
+```json
 {
-  "posts": [
-    {
-      "_id": "637984729847298472984729",
-      "user": "637984729847298472984729",
-      "post": "This is a post.",
-      "imageUrl": null,
-      "videoUrl": null,
-      "createdAt": "2023-08-09T18:30:00.000Z",
-      "likes": [],
-      "comments": []
-    }
-  ],
-  "pagination": {
-    "currentPage": 1,
-    "totalPages": 1,
-    "totalItems": 1
-  }
+  "comment": "This is a comment."
 }
-
-
 ```
 
-- `GET /posts/user/:id`: Retrieve posts by a specific user (paginated).
-- `GET /post/following`: Retrieve posts from followed users (paginated).
-- `POST /posts/comment/:id`: Comment on a post.
-- `POST /posts/likes/:id`: Like or unlike a post.
-- `POST /posts/mentions`: Create a mention notification for a post.
+**Response:**
 
+```json
+[
+  {
+    "user": "637984729847298472984729",
+    "comments": "This is a comment."
+  }
+]
+```
+
+#### Like Post
+
+**Route:** POST /posts/likes/:id
+
+**Parameters:**
+
+- `id`: The ID of the post
+
+**Response:**
+
+```json
+[
+  "637984729847298472984729"
+]
+```
+
+#### Mention Users in Post
+
+**Route:** POST /posts/mentions
+
+**Body:**
+
+```json
+{
+  "userId": "637984729847298472984729",
+  "post": "This is a post that mentions @username."
+}
+```
+
+**Response:**
+
+```json
+{
+  "post": "This is a post that mentions @username."
+}
+```
+
+### Users
+
+#### Get All Users
+
+**Route:** GET /users
 
 
 ## Installation

@@ -1,11 +1,10 @@
 # Express-TypeScript (AI-powered social media)
- A RESTful API for a basic social media platform powered by an AI that optionally enhances users' posts.
- 
-This Express-based server application is built with TypeScript, designed to handle various functionalities such as user authentication, post creation and management, and real-time notifications using Socket.IO.
 
+This project presents a RESTful API for a simple social media platform, augmented by an AI that can optionally improve user posts. It is a Node.js application utilizing Express and TypeScript to offer a RESTful API for user authentication, post management, and other features. The application uses MongoDB for data storage, Redis for caching, and incorporates Google's Gemini AI to enhance posts.
 
 ## Table of Contents
 
+- [Key Features](#key-features)
 - [File Structure](#file-structure)
   - [Controllers](#controllers)
   - [Database](#database)
@@ -16,6 +15,20 @@ This Express-based server application is built with TypeScript, designed to hand
 - [API Documentation](#api-documentation)
 - [Installation](#installation)
 - [Usage](#usage)
+
+
+
+## Key Features
+
+- **User Authentication**: Register and log in users with email and password.
+- **Post Management**: Create, read, update, and delete posts with support for text, images, and videos.
+- **Google Gemini AI Integration**: Optionally rewrite post content using Google's Gemini AI language model.
+- **User Interactions**: Follow other users, like and comment on posts, and receive notifications.
+- **Pagination and Caching**: Retrieve data with pagination support and caching for improved performance.
+- **Socket.IO Integration**: Real-time notifications and updates.
+
+The application follows a modular structure with separate folders for controllers, database models, middlewares, and routes. TypeScript is used for type safety and better tooling support.
+
 
 
 ## File Structure
@@ -104,7 +117,7 @@ To create a new post with the optional Gemini AI rewrite, send a POST request to
 ```json
 {
   "post": "This is my post.",
-  "edit": "Make it lively", // Calling Gemini AI rewrite
+  "edit": "Make it lively", : Calling Gemini AI rewrite
   "imageUrl": null,
   "videoUrl": null
 }
@@ -116,7 +129,7 @@ To create a new post with the optional Gemini AI rewrite, send a POST request to
 {
   "_id": "637984729847298472984729",
   "user": "637984729847298472984729",
-  "post": "Super excited to share this post with you!", // Post after Gemini AI rewrite
+  "post": "Super excited to share this post with you!", : Post after Gemini AI rewrite
   "imageUrl": null,
   "videoUrl": null,
   "createdAt": "2023-08-09T18:30:00.000Z",
@@ -255,7 +268,7 @@ If the `edit` field is provided in the request body, the Gemini AI model will be
 ```json
 {
   "post": "This is my post.",
-  "edit": "Make it lively" //calling gemini AI rewrite
+  "edit": "Make it lively" :calling gemini AI rewrite
   "imageUrl": null,
   "videoUrl": null
 }
@@ -267,7 +280,7 @@ If the `edit` field is provided in the request body, the Gemini AI model will be
 {
   "_id": "637984729847298472984729",
   "user": "637984729847298472984729",
-  "post": "Super excited to share this post with you!", //post after gemini AI rewrite
+  "post": "Super excited to share this post with you!", :post after gemini AI rewrite
   "imageUrl": null,
   "videoUrl": null,
   "createdAt": "2023-08-09T18:30:00.000Z",

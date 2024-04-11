@@ -101,7 +101,50 @@ Make sure to create a `.env` file in the root directory and provide the followin
 ### Authentication
 
 - `POST /auth/register`: Register a new user account.
+
+    - Body
+  ```
+  {
+  "email": "user@example.com",
+  "password": "password",
+  "username": "John Doe"
+ }
+
+  ```
+  - Response
+ ```
+{
+  "_id": "637984729847298472984729",
+  "username": "John Doe",
+  "email": "user@example.com",
+  "authentication": {
+    "salt": "sdfsdfsdfsdf",
+    "password": "sdfsdfsdfsdf"
+  }
+}
+
+```
+
 - `POST /auth/login`: Log in with an existing user account.
+    - Body
+  ```
+  {
+  "email": "user@example.com",
+  "password": "password"
+  }
+  ```
+  - Response
+```
+{
+  "_id": "637984729847298472984729",
+  "username": "John Doe",
+  "email": "user@example.com",
+  "authentication": {
+    "sessionToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MzM3OTQ3Mjk4NDcyOTg0NzI5ODQ3MjkifQ.sdfsdfsdfsdf"
+  }
+}
+```
+  
 
 ### Users
 
@@ -113,10 +156,169 @@ Make sure to create a `.env` file in the root directory and provide the followin
 ### Posts
 
 - `GET /posts`: Retrieve a list of all posts (paginated).
+
+```
+Query Parameters:
+
+ - page: The page number (default: 1)
+
+ - limit: The number of posts per page (default: 10)
+```
+
+  - Response
+```
+{
+  "posts": [
+    {
+      "_id": "637984729847298472984729",
+      "user": "637984729847298472984729",
+      "post": "This is a post.",
+      "imageUrl": null,
+      "videoUrl": null,
+      "createdAt": "2023-08-09T18:30:00.000Z",
+      "likes": [],
+      "comments": []
+    }
+  ],
+  "pagination": {
+    "currentPage": 1,
+    "totalPages": 1,
+    "totalItems": 1
+  }
+}
+
+
+```
+
 - `GET /posts/:id`: Retrieve a single post by ID.
+
+```
+Query Parameters:
+
+ - id: The ID of the post
+   
+```
+
+  - Response
+```
+{
+  "_id": "637984729847298472984729",
+  "user": "637984729847298472984729",
+  "post": "This is a post.",
+  "imageUrl": null,
+  "videoUrl": null,
+  "createdAt": "2023-08-09T18:30:00.000Z",
+  "likes": [],
+  "comments": []
+}
+
+```
+
 - `POST /posts/new`: Create a new post (with optional Gemini AI rewrite).
+
+```
+Query Parameters:
+
+ - page: The page number (default: 1)
+
+ - limit: The number of posts per page (default: 10)
+```
+
+  - Response
+```
+{
+  "posts": [
+    {
+      "_id": "637984729847298472984729",
+      "user": "637984729847298472984729",
+      "post": "This is a post.",
+      "imageUrl": null,
+      "videoUrl": null,
+      "createdAt": "2023-08-09T18:30:00.000Z",
+      "likes": [],
+      "comments": []
+    }
+  ],
+  "pagination": {
+    "currentPage": 1,
+    "totalPages": 1,
+    "totalItems": 1
+  }
+}
+
+
+```
+
 - `DELETE /posts/:id`: Delete a post by ID.
+
+```
+Query Parameters:
+
+ - page: The page number (default: 1)
+
+ - limit: The number of posts per page (default: 10)
+```
+
+  - Response
+```
+{
+  "posts": [
+    {
+      "_id": "637984729847298472984729",
+      "user": "637984729847298472984729",
+      "post": "This is a post.",
+      "imageUrl": null,
+      "videoUrl": null,
+      "createdAt": "2023-08-09T18:30:00.000Z",
+      "likes": [],
+      "comments": []
+    }
+  ],
+  "pagination": {
+    "currentPage": 1,
+    "totalPages": 1,
+    "totalItems": 1
+  }
+}
+
+
+```
+
 - `PATCH /posts/:id`: Update a post by ID (with optional content and media updates).
+
+```
+Query Parameters:
+
+ - page: The page number (default: 1)
+
+ - limit: The number of posts per page (default: 10)
+```
+
+  - Response
+```
+{
+  "posts": [
+    {
+      "_id": "637984729847298472984729",
+      "user": "637984729847298472984729",
+      "post": "This is a post.",
+      "imageUrl": null,
+      "videoUrl": null,
+      "createdAt": "2023-08-09T18:30:00.000Z",
+      "likes": [],
+      "comments": []
+    }
+  ],
+  "pagination": {
+    "currentPage": 1,
+    "totalPages": 1,
+    "totalItems": 1
+  }
+}
+
+
+```
+
 - `GET /posts/user/:id`: Retrieve posts by a specific user (paginated).
 - `GET /post/following`: Retrieve posts from followed users (paginated).
 - `POST /posts/comment/:id`: Comment on a post.

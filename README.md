@@ -97,11 +97,10 @@ Make sure to create a `.env` file in the root directory and provide the followin
 
 
 ## API Documentation
-## API Documentation
 
 ### Authentication
 
-#### Login
+#### Login with an existing user account.
 
 **Route:** POST /auth/login
 
@@ -127,7 +126,7 @@ Make sure to create a `.env` file in the root directory and provide the followin
 }
 ```
 
-#### Register
+#### Register a new user account
 
 **Route:** POST /auth/register
 
@@ -157,7 +156,7 @@ Make sure to create a `.env` file in the root directory and provide the followin
 
 ### Posts
 
-#### Get All Posts
+#### Retrieve a list of all posts (paginated)
 
 **Route:** GET /posts
 
@@ -190,7 +189,7 @@ Make sure to create a `.env` file in the root directory and provide the followin
 }
 ```
 
-#### Get Post by ID
+#### Retrieve a single post by ID
 
 **Route:** GET /posts/:id
 
@@ -213,7 +212,7 @@ Make sure to create a `.env` file in the root directory and provide the followin
 }
 ```
 
-#### Create Post
+#### Create a new post (with optional Gemini AI rewrite)
 
 **Route:** POST /posts/new
 
@@ -221,7 +220,8 @@ Make sure to create a `.env` file in the root directory and provide the followin
 
 ```json
 {
-  "post": "This is a post.",
+  "post": "This is my post.",
+  "edit": "Make it lively" //calling gemini AI rewrite
   "imageUrl": null,
   "videoUrl": null
 }
@@ -233,7 +233,7 @@ Make sure to create a `.env` file in the root directory and provide the followin
 {
   "_id": "637984729847298472984729",
   "user": "637984729847298472984729",
-  "post": "This is a post.",
+  "post": "Super excited to share this post with you!", //post after gemini AI rewrite
   "imageUrl": null,
   "videoUrl": null,
   "createdAt": "2023-08-09T18:30:00.000Z",
@@ -242,7 +242,7 @@ Make sure to create a `.env` file in the root directory and provide the followin
 }
 ```
 
-#### Delete Post
+#### Delete a post by ID
 
 **Route:** DELETE /posts/:id
 
@@ -265,7 +265,7 @@ Make sure to create a `.env` file in the root directory and provide the followin
 }
 ```
 
-#### Update Post
+#### Update a post by ID (with optional content and media updates)
 
 **Route:** PATCH /posts/:id
 
@@ -292,7 +292,7 @@ Make sure to create a `.env` file in the root directory and provide the followin
 }
 ```
 
-#### Get Posts by User
+#### Retrieve posts by a specific user (paginated)
 
 **Route:** GET /posts/user/:id
 
@@ -324,7 +324,7 @@ Make sure to create a `.env` file in the root directory and provide the followin
 }
 ```
 
-#### Get Posts from Followed Users
+#### Retrieve posts from followed users (paginated)
 
 **Route:** GET /post/following
 
@@ -352,7 +352,7 @@ Make sure to create a `.env` file in the root directory and provide the followin
 }
 ```
 
-#### Comment on Post
+#### Comment on a post
 
 **Route:** POST /posts/comment/:id
 
@@ -379,7 +379,7 @@ Make sure to create a `.env` file in the root directory and provide the followin
 ]
 ```
 
-#### Like Post
+#### Like or unlike a post
 
 **Route:** POST /posts/likes/:id
 
@@ -395,7 +395,7 @@ Make sure to create a `.env` file in the root directory and provide the followin
 ]
 ```
 
-#### Mention Users in Post
+#### Create a mention notification for a post
 
 **Route:** POST /posts/mentions
 
@@ -418,9 +418,110 @@ Make sure to create a `.env` file in the root directory and provide the followin
 
 ### Users
 
-#### Get All Users
+#### Retrieve a list of all users (paginated)
 
 **Route:** GET /users
+
+**Query Parameters:**
+
+- `page`: The page number (default: 1)
+- `limit`: The number of users per page (default: 10)
+
+**Response:**
+
+```json
+{
+  "users": [
+    {
+      "_id": "637984729847298472984729",
+      "username": "John Doe",
+      "email": "user@example.com",
+      "authentication": {
+        "password": "sdfsdfsdfsdf",
+        "salt": "sdfsdfsdfsdf"
+      },
+      "following": [],
+      "followers": []
+    }
+  ],
+  "pagination": {
+    "currentPage": 1,
+    "totalPages": 1,
+    "totalItems": 1
+  }
+}
+```
+
+#### Delete a user by ID
+
+**Route:** DELETE /users/:id
+
+**Parameters:**
+
+- `id`: The ID of the user
+
+**Response:**
+
+```json
+{
+  "_id": "637984729847298472984729",
+  "username": "John Doe",
+  "email": "user@example.com",
+  "authentication": {
+    "password": "sdfsdfsdfsdf",
+    "salt": "sdfsdfsdfsdf"
+  },
+  "following": [],
+  "followers": []
+}
+```
+
+#### Update a user by ID
+
+**Route:** PATCH /users/:id
+
+**Body:**
+
+```json
+{
+  "username": "Jane Doe"
+}
+```
+
+**Response:**
+
+```json
+{
+  "_id": "637984729847298472984729",
+  "username": "Jane Doe",
+  "email": "user@example.com",
+  "authentication": {
+    "password": "sdfsdfsdfsdf",
+    "salt": "sdfsdfsdfsdf"
+  },
+  "following": [],
+  "followers": []
+}
+```
+
+#### Follow another user by ID
+
+**Route:** POST /follow/:id
+
+**Parameters:**
+
+- `id`: The ID of the user to follow
+
+**Response:**
+
+```json
+{
+  "following": [
+    "637984729847298472984729"
+  ]
+}
+```
+
 
 
 ## Installation

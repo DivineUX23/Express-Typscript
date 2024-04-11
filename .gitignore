@@ -1,8 +1,3 @@
 node_modules/
 .env
 uploads
-jest
-nodemon
-package-lock.json
-package.json
-tsconfig.json

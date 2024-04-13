@@ -36,7 +36,7 @@ export { io };
 
 auth(io);
 
-handleConnection(io, "Date");
+handleConnection(io);
 
 // Start the server on port 8080
 server.listen(8080, () => {

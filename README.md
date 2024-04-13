@@ -483,10 +483,7 @@ If the `edit` field is provided in the request body, the Gemini AI model will be
       "_id": "637984729847298472984729",
       "username": "John Doe",
       "email": "user@example.com",
-      "authentication": {
-        "password": "sdfsdfsdfsdf",
-        "salt": "sdfsdfsdfsdf"
-      },
+      "authentication": {},
       "following": [],
       "followers": []
     }

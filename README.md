@@ -83,7 +83,7 @@ The application follows a modular structure with separate folders for controller
 
 - `Caching.ts`: Implements caching middleware for efficient data retrieval.
 - `Index.ts`: Contains middleware functions for authentication, ownership checks, and post-ownership checks.
-- `notifications.ts`: Handles real-time notifications using Socket.IO.
+- `notifications.ts`: Handles real-time notifications (comment like and mention notifications) using Socket.IO.
 - `paginations.ts`: Implements pagination middleware for database queries.
 - `uploads.ts`: Configures file upload handling using Multer.
 
@@ -442,26 +442,6 @@ If the `edit` field is provided in the request body, the Gemini AI model will be
 ]
 ```
 
-#### Create a mention notification for a post
-
-**Route:** POST /posts/mentions
-
-**Body:**
-
-```json
-{
-  "userId": "637984729847298472984729",
-  "post": "This is a post that mentions @username."
-}
-```
-
-**Response:**
-
-```json
-{
-  "post": "This is a post that mentions @username."
-}
-```
 
 ### Users
 
@@ -607,5 +587,3 @@ npm start
 The server will start running at `http://localhost:8080`.
 
 2. Use an API client like Postman or cURL to interact with the available endpoints.
-
-

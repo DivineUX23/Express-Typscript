@@ -4,15 +4,12 @@ import { getPosts, createPost, getPostById, deletePostById, getPostsByUser, Post
 import { getUserBySessionToken } from "../db/users";
 
 import paginationMiddleware from '../middlewares/pagination';
-import { getUserById } from  "../db/users";
-
-import { NotificationModel, getUserNotification } from '../db/notifications'
-
-import { io } from "../index"
 
 import { Redis } from "ioredis";
 
 import { run } from "./gemini"
+
+import { mentions, like_notification, comment_notification } from "../middlewares/notification"
 
 
 import dotenv from 'dotenv';
@@ -89,8 +86,12 @@ export const getOneById = async (req: express.Request, res: express.Response) =>
  */
 export const creatingPost = async (req: express.Request, res: express.Response) => {
     try{
-        const { post, edit } = req.body
+        const { post, edit, userId } = req.body
 
+        // Notify mentioned user.
+        if (userId){
+            mentions(req, res, userId, post)        
+        }
 
         const files = req.files as { [fieldname: string]: Express.Multer.File[] };
 
@@ -135,7 +136,6 @@ export const creatingPost = async (req: express.Request, res: express.Response) 
             return res.status(200).json(posting).end();
 
         }
-
 
         // Create the new post without Gemini AI
         const posting = await createPost({
@@ -361,57 +361,10 @@ export const comment = async (req: express.Request, res: express.Response ) => {
         post?.comments.push(value);
         await post?.save();
 
+        
+        // Create and send notification to creator of commented post.
+        comment_notification(req, res, post, existingUser, comment)
 
-        // Retrieve the author of the post
-        const postAuthor = await getUserById(post.user.toString());
-
-        const existingNotifications = await getUserNotification(postAuthor._id.toString());
-
-
-        // Create a new notification if none exist
-        if (!existingNotifications) {
-
-            const commentNotification = new NotificationModel({
-            user: postAuthor._id,
-            notifications: [
-                {
-                type: 'commenting',
-                data: {
-                    comment,
-                    postId: post?._id,
-                    commentedBy: existingUser._id,
-                },
-                },
-            ],
-            });
-            await commentNotification.save();
-
-
-            // Emit the notification event to the post author
-            io.to(`user:${postAuthor._id.toString()}`).emit('new-like', commentNotification);
-            console.log('New like notification sent');
-
-        } else {
-
-            // Add to existing notifications
-            const commentNotification = {
-            type: 'commenting',
-            data: {
-                comment,
-                postId: post?._id,
-                commentedBy: existingUser._id,
-            },
-            };
-
-            existingNotifications.notifications.push(commentNotification);
-
-            await existingNotifications?.save();
-            
-
-            // Emit the notification event to the post author
-            io.to(`user:${postAuthor._id.toString()}`).emit('new-comment', commentNotification);
-            console.log('New like notification sent');
-        }
 
         return res.status(200).json(post?.comments);
 
@@ -467,52 +420,8 @@ export const likes = async (req: express.Request, res: express.Response ) => {
         await post.save();
 
 
-        // Retrieve the author of the post
-        const postAuthor = await getUserById(post.user.toString());
-
-        const existingNotifications = await getUserNotification(postAuthor._id.toString());
-        
-
-        // Create a new notification if none exist
-        if (!existingNotifications) {
-
-            const Notification = new NotificationModel({
-            user: postAuthor._id,
-            notifications: [
-                {
-                type: 'like',
-                data: {
-                    postId: post?._id,
-                    likedBy: existingUser._id,
-                },
-                },
-            ],
-            });
-            await Notification.save();
-
-            // Emit the notification event to the post author            
-            io.to(`user:${postAuthor._id.toString()}`).emit('new-like', Notification);
-            console.log('New like notification sent');
-        
-        } else {
-        
-            // Add to existing notifications
-            const Notification = {
-                type: 'like',
-                data: {
-                    postId: post?._id,
-                    likedBy: existingUser._id,
-                },
-            };
-
-            existingNotifications.notifications.push(Notification);
-            await existingNotifications?.save();
-
-            // Emit the notification event to the post author
-            io.to(`user:${postAuthor._id.toString()}`).emit('new-like', Notification);
-            console.log('New like notification sent');
-        
-        }
+        // Create and send notification to creator of liked post.
+        like_notification(req, res, post, existingUser)
 
         // Return the count of likes
         return res.status(200).json(post.likes);
@@ -520,69 +429,5 @@ export const likes = async (req: express.Request, res: express.Response ) => {
     } catch (error){
         console.log(error);
         return res.status(500).send('An error occurred while processing the like.');
-    }
-};
-
-
-/**
- * Handles the creation of a mention notification for a post, nofities mentioned user.
- * @param {express.Request} req - The request object.
- * @param {express.Response} res - The response object.
- * @returns {Promise<void>}
- */
-export const mentions = async (req: express.Request, res: express.Response ) => {
-
-    try{
-
-        const { userId, post } = req.body;
-
-        // Retrieve the author of the post
-        const postAuthor = await getUserById(userId);
-        if (!postAuthor) {
-            return res.status(404).send('Post author not found.');
-        }
-
-        // Check for existing notifications
-        const existingNotifications = await NotificationModel.findOne({ user: postAuthor._id.toString() });
-
-        // Create a new notification if none exist
-        if (!existingNotifications) {
-
-            const Notification = new NotificationModel({
-                user: postAuthor._id,
-                notifications: [
-                    {
-                        type: 'mention',
-                        data: post
-                    },
-                ],
-            });
-            await Notification.save();
-            
-
-            io.to(`user:${postAuthor._id.toString()}`).emit('mention', Notification);
-            console.log('New like notification sent');
-
-        } else {
-            // Add to existing notifications
-            const Notification = {
-                type: 'mention',
-                data: post
-            };
-
-            existingNotifications.notifications.push(Notification);
-            await existingNotifications?.save();
-
-            
-            // Emit the 'mention' event to the post author
-            io.to(`user:${postAuthor._id.toString()}`).emit('mention', Notification);
-            console.log('New like notification sent');
-
-        }
-        return res.status(200).json(post);
-
-    } catch (error) {
-        console.log(error);
-        return res.status(500).send('An error occurred while creating the mention notification.');
     }
 };

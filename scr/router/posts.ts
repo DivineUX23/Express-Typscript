@@ -1,7 +1,7 @@
 import express from "express"
 
 import { getAllPost, getOneById, creatingPost, deletePost, updatePost, 
-    getPostByUser, getPostByFollowing, comment, likes, mentions } from "../controllers/posts"
+    getPostByUser, getPostByFollowing, comment, likes } from "../controllers/posts"
 
 import { isAuthenticated, isOwner, isPostOwner } from "../middlewares";
 
@@ -48,6 +48,6 @@ export default (router: express.Router) => {
     router.post('/posts/likes/:id', isAuthenticated, likes);
 
     // Route to mention users in a post, with authentication
-    router.post('/posts/mentions', isAuthenticated, mentions);
+    //router.post('/posts/mentions', isAuthenticated, mentions);
 
 };
